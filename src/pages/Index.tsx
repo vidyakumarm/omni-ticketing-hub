@@ -1,12 +1,22 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+
+import { Hero } from "../components/landing/Hero";
+import { FeatureHighlights } from "../components/landing/FeatureHighlights";
+import { UseCaseGrid } from "../components/landing/UseCaseGrid";
+import { IntegrationsPanel } from "../components/landing/IntegrationsPanel";
+import { CustomerTestimonials } from "../components/landing/CustomerTestimonials";
+import { Footer } from "../components/landing/Footer";
+import { DemoRequestModal } from "../components/landing/DemoRequestModal";
 
 const Index = () => {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-gray-600">Start building your amazing project here!</p>
-      </div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+      <Hero />
+      <FeatureHighlights />
+      <UseCaseGrid />
+      <IntegrationsPanel />
+      <CustomerTestimonials />
+      <Footer />
+      <DemoRequestModal />
     </div>
   );
 };
