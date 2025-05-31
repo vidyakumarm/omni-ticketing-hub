@@ -13,6 +13,7 @@ import Inbox from "./pages/Inbox";
 import Kanban from "./pages/Kanban";
 import TicketDetail from "./pages/TicketDetail";
 import CustomFields from "./pages/CustomFields";
+import SLAs from "./pages/SLAs";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -33,6 +34,7 @@ const App = () => (
           <Route path="/kanban" element={<Kanban />} />
           <Route path="/ticket/:ticketId" element={<TicketDetail />} />
           <Route path="/settings/custom-fields" element={<CustomFields />} />
+          <Route path="/settings/slas" element={<SLAs />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

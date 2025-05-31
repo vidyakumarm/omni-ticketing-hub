@@ -8,28 +8,16 @@ import { TicketListTable } from '@/components/inbox/TicketListTable';
 import { BulkActionsBar } from '@/components/inbox/BulkActionsBar';
 import { NewTicketModal } from '@/components/ticket-creation/NewTicketModal';
 
-// Define the filters interface to match what the components expect
-interface TicketFilters {
-  search: string;
-  status: string;
-  agentId: string;
-  priority: string;
-  channel: string;
-  dateFrom?: Date;
-  dateTo?: Date;
-  customFields: Record<string, any>;
-}
-
 const Inbox: React.FC = () => {
   const navigate = useNavigate();
   const [selectedTickets, setSelectedTickets] = useState<string[]>([]);
   const [isNewTicketModalOpen, setIsNewTicketModalOpen] = useState(false);
-  const [filters, setFilters] = useState<TicketFilters>({
+  const [filters, setFilters] = useState({
     search: '',
-    status: '',
+    status: [],
     agentId: '',
-    priority: '',
-    channel: '',
+    priority: [],
+    channel: [],
     dateFrom: undefined,
     dateTo: undefined,
     customFields: {}
@@ -44,12 +32,8 @@ const Inbox: React.FC = () => {
     // Handle bulk actions here
   };
 
-  const handleFilterChange = (newFilters: Partial<TicketFilters>) => {
+  const handleFilterChange = (newFilters: any) => {
     setFilters(prev => ({ ...prev, ...newFilters }));
-  };
-
-  const handleTicketSelect = (tickets: string[]) => {
-    setSelectedTickets(tickets);
   };
 
   return (
@@ -80,7 +64,6 @@ const Inbox: React.FC = () => {
         {/* Ticket List */}
         <TicketListTable 
           selectedTickets={selectedTickets}
-          onTicketSelect={handleTicketSelect}
           filters={filters}
         />
 
