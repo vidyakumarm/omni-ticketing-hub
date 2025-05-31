@@ -47,7 +47,74 @@ interface TicketsResponse {
   };
 }
 
+// Mock data for development since API doesn't exist yet
+const mockTicketsData: TicketsResponse = {
+  tickets: [
+    {
+      id: "ticket-001",
+      subject: "Login issue with SSO",
+      preview: "Unable to login using single sign-on, getting error message...",
+      customer: {
+        name: "John Doe",
+        avatarUrl: "/placeholder.svg",
+        identifier: "john.doe@company.com"
+      },
+      channel: "email",
+      status: "open",
+      priority: "High",
+      assignee: {
+        id: "agent-1",
+        name: "Alice Johnson",
+        avatarUrl: "/placeholder.svg"
+      },
+      lastUpdated: "2024-01-15T10:30:00Z"
+    },
+    {
+      id: "ticket-002",
+      subject: "Feature request for dark mode",
+      preview: "Would love to see a dark mode option in the application...",
+      customer: {
+        name: "Jane Smith",
+        avatarUrl: "/placeholder.svg",
+        identifier: "jane.smith@example.com"
+      },
+      channel: "slack",
+      status: "pending",
+      priority: "Medium",
+      assignee: null,
+      lastUpdated: "2024-01-15T09:15:00Z"
+    },
+    {
+      id: "ticket-003",
+      subject: "Billing question about premium plan",
+      preview: "I have a question about upgrading to the premium plan...",
+      customer: {
+        name: "Bob Wilson",
+        avatarUrl: "/placeholder.svg",
+        identifier: "bob.wilson@startup.io"
+      },
+      channel: "web",
+      status: "resolved",
+      priority: "Low",
+      assignee: {
+        id: "agent-2",
+        name: "Carol Davis",
+        avatarUrl: "/placeholder.svg"
+      },
+      lastUpdated: "2024-01-14T16:45:00Z"
+    }
+  ],
+  pagination: {
+    page: 1,
+    perPage: 25,
+    totalItems: 3,
+    totalPages: 1
+  }
+};
+
 const Inbox = () => {
+  console.log('Inbox component rendering');
+  
   const [selectedTickets, setSelectedTickets] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(25);
@@ -83,24 +150,29 @@ const Inbox = () => {
     return params.toString();
   };
 
+  // Using mock data instead of real API call for now
   const { data: ticketsData, isLoading, error } = useQuery({
     queryKey: ['tickets', currentPage, perPage, filters],
     queryFn: async (): Promise<TicketsResponse> => {
-      const queryParams = buildQueryParams();
-      const response = await fetch(`/api/workspace/workspace-id/tickets?${queryParams}`);
-      if (!response.ok) {
-        throw new Error('Failed to fetch tickets');
-      }
-      return response.json();
+      console.log('Fetching tickets with filters:', filters);
+      // Simulate API delay
+      await new Promise(resolve => setTimeout(resolve, 500));
+      return mockTicketsData;
     },
   });
 
+  console.log('Tickets data:', ticketsData);
+  console.log('Is loading:', isLoading);
+  console.log('Error:', error);
+
   const handleFilterChange = (newFilters: Partial<TicketFilters>) => {
+    console.log('Filter change:', newFilters);
     setFilters(prev => ({ ...prev, ...newFilters }));
     setCurrentPage(1); // Reset to first page when filters change
   };
 
   const handleSelectTicket = (ticketId: string, selected: boolean) => {
+    console.log('Select ticket:', ticketId, selected);
     if (selected) {
       setSelectedTickets(prev => [...prev, ticketId]);
     } else {
@@ -109,6 +181,7 @@ const Inbox = () => {
   };
 
   const handleSelectAll = (selected: boolean) => {
+    console.log('Select all:', selected);
     if (selected && ticketsData?.tickets) {
       setSelectedTickets(ticketsData.tickets.map(ticket => ticket.id));
     } else {
@@ -123,6 +196,7 @@ const Inbox = () => {
   };
 
   if (error) {
+    console.error('Error in Inbox:', error);
     return (
       <div className="min-h-screen bg-gray-50 p-6">
         <div className="max-w-7xl mx-auto">
