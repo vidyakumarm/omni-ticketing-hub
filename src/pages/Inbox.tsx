@@ -8,19 +8,30 @@ import { TicketListTable } from '@/components/inbox/TicketListTable';
 import { BulkActionsBar } from '@/components/inbox/BulkActionsBar';
 import { NewTicketModal } from '@/components/ticket-creation/NewTicketModal';
 
+interface TicketFilters {
+  search: string;
+  status: string[];
+  agentId: string;
+  priority: string[];
+  channel: string;
+  dateFrom: string;
+  dateTo: string;
+  customFields: Record<string, any>;
+}
+
 const Inbox: React.FC = () => {
   const navigate = useNavigate();
   const [selectedTickets, setSelectedTickets] = useState<string[]>([]);
   const [isNewTicketModalOpen, setIsNewTicketModalOpen] = useState(false);
-  const [filters, setFilters] = useState({
+  const [filters, setFilters] = useState<TicketFilters>({
     search: '',
-    status: [] as string[],
+    status: [],
     agentId: '',
-    priority: [] as string[],
+    priority: [],
     channel: '',
-    dateFrom: undefined as Date | undefined,
-    dateTo: undefined as Date | undefined,
-    customFields: {} as Record<string, any>
+    dateFrom: '',
+    dateTo: '',
+    customFields: {}
   });
 
   const handleTicketCreated = (ticketId: string) => {
@@ -34,6 +45,32 @@ const Inbox: React.FC = () => {
 
   const handleFilterChange = (newFilters: any) => {
     setFilters(prev => ({ ...prev, ...newFilters }));
+  };
+
+  // Mock tickets for the table
+  const mockTickets = [
+    {
+      id: 'ticket-1',
+      subject: 'Login issue with SSO',
+      customer: { name: 'John Doe', avatarUrl: '/placeholder.svg' },
+      channel: 'email' as const,
+      status: 'open' as const,
+      priority: 'High' as const,
+      assignee: { id: 'agent-1', name: 'Alice Johnson' },
+      lastUpdated: '2024-01-15T10:30:00Z'
+    }
+  ];
+
+  const handleSelectTicket = (ticketId: string) => {
+    setSelectedTickets(prev => 
+      prev.includes(ticketId) 
+        ? prev.filter(id => id !== ticketId)
+        : [...prev, ticketId]
+    );
+  };
+
+  const handleSelectAll = (selected: boolean) => {
+    setSelectedTickets(selected ? mockTickets.map(t => t.id) : []);
   };
 
   return (
@@ -63,7 +100,13 @@ const Inbox: React.FC = () => {
 
         {/* Ticket List */}
         <TicketListTable 
+          tickets={mockTickets}
           selectedTickets={selectedTickets}
+          onSelectTicket={handleSelectTicket}
+          onSelectAll={handleSelectAll}
+          currentPage={1}
+          totalPages={1}
+          onPageChange={() => {}}
         />
 
         {/* New Ticket Modal */}
