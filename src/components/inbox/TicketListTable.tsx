@@ -111,9 +111,9 @@ export const TicketListTable: React.FC<TicketListTableProps> = ({
             <TableHead className="w-12">
               <Checkbox
                 checked={allSelected}
-                indeterminate={someSelected}
                 onCheckedChange={(checked) => onSelectAll(!!checked)}
                 aria-label="Select all tickets"
+                className={someSelected ? 'data-[state=checked]:bg-blue-600' : ''}
               />
             </TableHead>
             <TableHead>Ticket ID</TableHead>
