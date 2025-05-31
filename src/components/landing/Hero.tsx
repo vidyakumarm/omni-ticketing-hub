@@ -120,7 +120,7 @@ export const Hero = () => {
             
             <div className="absolute -bottom-8 -right-8 bg-white rounded-xl shadow-lg p-4 animate-float delay-1000">
               <div className="text-xs text-gray-600">Response Time</div>
-              <div className="text-lg font-bold text-green-600">< 2 min</div>
+              <div className="text-lg font-bold text-green-600">&lt; 2 min</div>
             </div>
           </div>
         </div>
