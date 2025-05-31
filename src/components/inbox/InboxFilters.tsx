@@ -32,6 +32,23 @@ export const InboxFilters: React.FC<InboxFiltersProps> = ({
     onFilterChange({ status: newStatus });
   };
 
+  const handleChannelChange = (value: string) => {
+    const channelValue = value === 'all' ? '' : value;
+    onFilterChange({ channel: channelValue });
+  };
+
+  const handleAgentChange = (value: string) => {
+    const agentValue = value === 'all' ? '' : value;
+    onFilterChange({ agentId: agentValue });
+  };
+
+  const handlePriorityChange = (value: string) => {
+    const priorityValue = value === 'all' ? '' : value;
+    onFilterChange({ 
+      customFields: { ...filters.customFields, priority: priorityValue }
+    });
+  };
+
   const clearFilters = () => {
     onFilterChange({
       search: '',
@@ -71,12 +88,12 @@ export const InboxFilters: React.FC<InboxFiltersProps> = ({
         </div>
 
         {/* Channel Filter */}
-        <Select value={filters.channel} onValueChange={(value) => onFilterChange({ channel: value })}>
+        <Select value={filters.channel || 'all'} onValueChange={handleChannelChange}>
           <SelectTrigger className="w-[140px]">
             <SelectValue placeholder="All Channels" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="">All Channels</SelectItem>
+            <SelectItem value="all">All Channels</SelectItem>
             <SelectItem value="slack">Slack</SelectItem>
             <SelectItem value="teams">MS Teams</SelectItem>
             <SelectItem value="email">Email</SelectItem>
@@ -85,12 +102,12 @@ export const InboxFilters: React.FC<InboxFiltersProps> = ({
         </Select>
 
         {/* Agent Filter */}
-        <Select value={filters.agentId} onValueChange={(value) => onFilterChange({ agentId: value })}>
+        <Select value={filters.agentId || 'all'} onValueChange={handleAgentChange}>
           <SelectTrigger className="w-[140px]">
             <SelectValue placeholder="All Agents" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="">All Agents</SelectItem>
+            <SelectItem value="all">All Agents</SelectItem>
             <SelectItem value="unassigned">Unassigned</SelectItem>
             <SelectItem value="agent-1">Alice Johnson</SelectItem>
             <SelectItem value="agent-2">Bob Smith</SelectItem>
@@ -136,16 +153,14 @@ export const InboxFilters: React.FC<InboxFiltersProps> = ({
 
         {/* Priority Filter (Custom Field Example) */}
         <Select 
-          value={filters.customFields.priority || ''} 
-          onValueChange={(value) => onFilterChange({ 
-            customFields: { ...filters.customFields, priority: value }
-          })}
+          value={filters.customFields.priority || 'all'} 
+          onValueChange={handlePriorityChange}
         >
           <SelectTrigger className="w-[120px]">
             <SelectValue placeholder="Priority" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="">All Priority</SelectItem>
+            <SelectItem value="all">All Priority</SelectItem>
             <SelectItem value="high">High</SelectItem>
             <SelectItem value="medium">Medium</SelectItem>
             <SelectItem value="low">Low</SelectItem>
