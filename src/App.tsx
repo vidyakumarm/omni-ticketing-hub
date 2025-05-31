@@ -11,6 +11,7 @@ import Onboarding from "./pages/Onboarding";
 import Dashboard from "./pages/Dashboard";
 import Inbox from "./pages/Inbox";
 import Kanban from "./pages/Kanban";
+import TicketDetail from "./pages/TicketDetail";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
