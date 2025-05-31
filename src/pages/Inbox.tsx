@@ -8,17 +8,31 @@ import { TicketListTable } from '@/components/inbox/TicketListTable';
 import { BulkActionsBar } from '@/components/inbox/BulkActionsBar';
 import { NewTicketModal } from '@/components/ticket-creation/NewTicketModal';
 
+// Define the filters interface to match what the components expect
+interface TicketFilters {
+  search: string;
+  status: string;
+  agentId: string;
+  priority: string;
+  channel: string;
+  dateFrom?: Date;
+  dateTo?: Date;
+  customFields: Record<string, any>;
+}
+
 const Inbox: React.FC = () => {
   const navigate = useNavigate();
   const [selectedTickets, setSelectedTickets] = useState<string[]>([]);
   const [isNewTicketModalOpen, setIsNewTicketModalOpen] = useState(false);
-  const [filters, setFilters] = useState({
+  const [filters, setFilters] = useState<TicketFilters>({
     search: '',
     status: '',
-    assignee: '',
+    agentId: '',
     priority: '',
     channel: '',
-    dateRange: { from: undefined, to: undefined }
+    dateFrom: undefined,
+    dateTo: undefined,
+    customFields: {}
   });
 
   const handleTicketCreated = (ticketId: string) => {
@@ -28,6 +42,14 @@ const Inbox: React.FC = () => {
   const handleBulkAction = (action: string) => {
     console.log('Bulk action:', action, 'on tickets:', selectedTickets);
     // Handle bulk actions here
+  };
+
+  const handleFilterChange = (newFilters: Partial<TicketFilters>) => {
+    setFilters(prev => ({ ...prev, ...newFilters }));
+  };
+
+  const handleTicketSelect = (tickets: string[]) => {
+    setSelectedTickets(tickets);
   };
 
   return (
@@ -44,7 +66,7 @@ const Inbox: React.FC = () => {
         {/* Filters */}
         <InboxFilters 
           filters={filters}
-          onFilterChange={setFilters}
+          onFilterChange={handleFilterChange}
         />
 
         {/* Bulk Actions Bar */}
@@ -52,14 +74,13 @@ const Inbox: React.FC = () => {
           <BulkActionsBar 
             selectedCount={selectedTickets.length}
             onBulkAction={handleBulkAction}
-            selectedTickets={selectedTickets}
           />
         )}
 
         {/* Ticket List */}
         <TicketListTable 
           selectedTickets={selectedTickets}
-          onTicketSelect={setSelectedTickets}
+          onTicketSelect={handleTicketSelect}
           filters={filters}
         />
 
