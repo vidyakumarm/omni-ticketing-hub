@@ -121,7 +121,30 @@ const OnboardingWizard = ({ teamId, onComplete }: OnboardingWizardProps) => {
     }
   };
 
-  const CurrentStepComponent = steps[currentStep].component;
+  const renderCurrentStep = () => {
+    const commonProps = {
+      onNext: nextStep,
+      onPrev: prevStep,
+      isFirst: currentStep === 0,
+      isLast: currentStep === steps.length - 1
+    };
+
+    switch (currentStep) {
+      case 0:
+        return <WelcomeStep onNext={nextStep} />;
+      case 1:
+        return <WorkspaceDetailsStep data={data} updateData={updateData} {...commonProps} />;
+      case 2:
+        return <ChannelRoutingStep data={data} updateData={updateData} {...commonProps} />;
+      case 3:
+        return <InviteTeamStep data={data} updateData={updateData} {...commonProps} />;
+      case 4:
+        return <FinishStep data={data} onFinish={handleFinish} onPrev={prevStep} />;
+      default:
+        return null;
+    }
+  };
+
   const progress = ((currentStep + 1) / steps.length) * 100;
 
   return (
@@ -136,15 +159,7 @@ const OnboardingWizard = ({ teamId, onComplete }: OnboardingWizardProps) => {
         <Progress value={progress} className="w-full" />
       </CardHeader>
       <CardContent className="space-y-6">
-        <CurrentStepComponent
-          data={data}
-          updateData={updateData}
-          onNext={nextStep}
-          onPrev={prevStep}
-          onFinish={handleFinish}
-          isFirst={currentStep === 0}
-          isLast={currentStep === steps.length - 1}
-        />
+        {renderCurrentStep()}
       </CardContent>
     </Card>
   );
