@@ -46,6 +46,10 @@ export const ReplyComposer: React.FC<ReplyComposerProps> = ({ onReply }) => {
     setAttachments(prev => prev.filter((_, i) => i !== index));
   };
 
+  const handleInternalToggle = (checked: boolean | 'indeterminate') => {
+    setIsInternal(checked === true);
+  };
+
   return (
     <Card>
       <CardHeader>
@@ -111,7 +115,7 @@ export const ReplyComposer: React.FC<ReplyComposerProps> = ({ onReply }) => {
           <Checkbox
             id="internal-note"
             checked={isInternal}
-            onCheckedChange={setIsInternal}
+            onCheckedChange={handleInternalToggle}
           />
           <Label htmlFor="internal-note" className="text-sm">
             Add as internal note (visible only to agents)
