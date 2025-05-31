@@ -12,6 +12,7 @@ import Dashboard from "./pages/Dashboard";
 import Inbox from "./pages/Inbox";
 import Kanban from "./pages/Kanban";
 import TicketDetail from "./pages/TicketDetail";
+import CustomFields from "./pages/CustomFields";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -30,6 +31,8 @@ const App = () => (
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/inbox" element={<Inbox />} />
           <Route path="/kanban" element={<Kanban />} />
+          <Route path="/ticket/:ticketId" element={<TicketDetail />} />
+          <Route path="/settings/custom-fields" element={<CustomFields />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

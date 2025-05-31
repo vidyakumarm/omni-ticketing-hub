@@ -12,9 +12,22 @@ const Inbox: React.FC = () => {
   const navigate = useNavigate();
   const [selectedTickets, setSelectedTickets] = useState<string[]>([]);
   const [isNewTicketModalOpen, setIsNewTicketModalOpen] = useState(false);
+  const [filters, setFilters] = useState({
+    search: '',
+    status: '',
+    assignee: '',
+    priority: '',
+    channel: '',
+    dateRange: { from: undefined, to: undefined }
+  });
 
   const handleTicketCreated = (ticketId: string) => {
     navigate(`/ticket/${ticketId}`);
+  };
+
+  const handleBulkAction = (action: string) => {
+    console.log('Bulk action:', action, 'on tickets:', selectedTickets);
+    // Handle bulk actions here
   };
 
   return (
@@ -29,20 +42,25 @@ const Inbox: React.FC = () => {
         </div>
 
         {/* Filters */}
-        <InboxFilters />
+        <InboxFilters 
+          filters={filters}
+          onFilterChange={setFilters}
+        />
 
         {/* Bulk Actions Bar */}
         {selectedTickets.length > 0 && (
           <BulkActionsBar 
             selectedCount={selectedTickets.length}
-            onClearSelection={() => setSelectedTickets([])}
+            onBulkAction={handleBulkAction}
+            selectedTickets={selectedTickets}
           />
         )}
 
         {/* Ticket List */}
         <TicketListTable 
           selectedTickets={selectedTickets}
-          onSelectionChange={setSelectedTickets}
+          onTicketSelect={setSelectedTickets}
+          filters={filters}
         />
 
         {/* New Ticket Modal */}
