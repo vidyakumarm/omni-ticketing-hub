@@ -35,6 +35,7 @@ const App = () => (
           <Route path="/ticket/:ticketId" element={<TicketDetail />} />
           <Route path="/settings/custom-fields" element={<CustomFields />} />
           <Route path="/settings/slas" element={<SLAs />} />
+          <Route path="/settings/tags" element={<Tags />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

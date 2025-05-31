@@ -17,7 +17,7 @@ const Inbox: React.FC = () => {
     status: [],
     agentId: '',
     priority: [],
-    channel: [],
+    channel: '',
     dateFrom: undefined,
     dateTo: undefined,
     customFields: {}
@@ -64,7 +64,7 @@ const Inbox: React.FC = () => {
         {/* Ticket List */}
         <TicketListTable 
           selectedTickets={selectedTickets}
-          filters={filters}
+          onSelectionChange={setSelectedTickets}
         />
 
         {/* New Ticket Modal */}
