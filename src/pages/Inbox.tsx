@@ -14,13 +14,13 @@ const Inbox: React.FC = () => {
   const [isNewTicketModalOpen, setIsNewTicketModalOpen] = useState(false);
   const [filters, setFilters] = useState({
     search: '',
-    status: [],
+    status: [] as string[],
     agentId: '',
-    priority: [],
+    priority: [] as string[],
     channel: '',
-    dateFrom: undefined,
-    dateTo: undefined,
-    customFields: {}
+    dateFrom: undefined as Date | undefined,
+    dateTo: undefined as Date | undefined,
+    customFields: {} as Record<string, any>
   });
 
   const handleTicketCreated = (ticketId: string) => {
@@ -64,7 +64,6 @@ const Inbox: React.FC = () => {
         {/* Ticket List */}
         <TicketListTable 
           selectedTickets={selectedTickets}
-          onSelectionChange={setSelectedTickets}
         />
 
         {/* New Ticket Modal */}
