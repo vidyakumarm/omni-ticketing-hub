@@ -21,6 +21,7 @@ import AccountsContacts from "./pages/AccountsContacts";
 import Broadcasts from "./pages/Broadcasts";
 import HelpCenter from "./pages/HelpCenter";
 import UserProfile from "./pages/UserProfile";
+import AISettings from "./pages/AISettings";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -45,6 +46,7 @@ const App = () => (
           <Route path="/settings/tags" element={<Tags />} />
           <Route path="/settings/workflows" element={<Workflows />} />
           <Route path="/settings/custom-statuses" element={<CustomStatuses />} />
+          <Route path="/settings/ai" element={<AISettings />} />
           <Route path="/accounts-contacts" element={<AccountsContacts />} />
           <Route path="/broadcasts" element={<Broadcasts />} />
           <Route path="/help-center" element={<HelpCenter />} />

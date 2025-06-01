@@ -11,7 +11,8 @@ import {
   LogOut,
   Send,
   HelpCircle,
-  User
+  User,
+  Bot
 } from 'lucide-react';
 
 export const Navigation: React.FC = () => {
@@ -32,6 +33,7 @@ export const Navigation: React.FC = () => {
     { path: '/settings/slas', label: 'SLAs' },
     { path: '/settings/tags', label: 'Tags' },
     { path: '/settings/workflows', label: 'Workflows' },
+    { path: '/settings/ai', label: 'AI & Automation', icon: Bot },
   ];
 
   const isActive = (path: string) => location.pathname === path;
@@ -78,8 +80,9 @@ export const Navigation: React.FC = () => {
                   <Link
                     key={item.path}
                     to={item.path}
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                   >
+                    {item.icon && <item.icon className="h-4 w-4 mr-2" />}
                     {item.label}
                   </Link>
                 ))}
