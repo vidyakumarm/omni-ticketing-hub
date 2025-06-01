@@ -17,6 +17,7 @@ import SLAs from "./pages/SLAs";
 import Tags from "./pages/Tags";
 import Workflows from "./pages/Workflows";
 import CustomStatuses from "./pages/CustomStatuses";
+import AccountsContacts from "./pages/AccountsContacts";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -41,6 +42,7 @@ const App = () => (
           <Route path="/settings/tags" element={<Tags />} />
           <Route path="/settings/workflows" element={<Workflows />} />
           <Route path="/settings/custom-statuses" element={<CustomStatuses />} />
+          <Route path="/accounts-contacts" element={<AccountsContacts />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

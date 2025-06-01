@@ -53,20 +53,24 @@ const Inbox: React.FC = () => {
       id: 'ticket-1',
       subject: 'Login issue with SSO',
       preview: 'User experiencing issues logging in with SSO configuration...',
-      customer: { name: 'John Doe', avatarUrl: '/placeholder.svg' },
+      customer: { 
+        name: 'John Doe', 
+        avatarUrl: '/placeholder.svg',
+        identifier: 'john.doe@company.com'
+      },
       channel: 'email' as const,
       status: 'open' as const,
       priority: 'High' as const,
-      assignee: { id: 'agent-1', name: 'Alice Johnson' },
+      assignee: { id: 'agent-1', name: 'Alice Johnson', avatarUrl: '/placeholder.svg' },
       lastUpdated: '2024-01-15T10:30:00Z'
     }
   ];
 
-  const handleSelectTicket = (ticketId: string) => {
+  const handleSelectTicket = (ticketId: string, selected: boolean) => {
     setSelectedTickets(prev => 
-      prev.includes(ticketId) 
-        ? prev.filter(id => id !== ticketId)
-        : [...prev, ticketId]
+      selected 
+        ? [...prev, ticketId]
+        : prev.filter(id => id !== ticketId)
     );
   };
 
@@ -106,8 +110,9 @@ const Inbox: React.FC = () => {
           onSelectTicket={handleSelectTicket}
           onSelectAll={handleSelectAll}
           currentPage={1}
-          totalPages={1}
+          perPage={25}
           onPageChange={() => {}}
+          onPerPageChange={() => {}}
         />
 
         {/* New Ticket Modal */}
