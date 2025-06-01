@@ -55,13 +55,13 @@ export const ContactFilters: React.FC<ContactFiltersProps> = ({
           <Label htmlFor="account">Account</Label>
           <Select
             value={filters.accountId}
-            onValueChange={(value) => onFilterChange({ accountId: value })}
+            onValueChange={(value) => onFilterChange({ accountId: value === 'all' ? '' : value })}
           >
             <SelectTrigger>
               <SelectValue placeholder="All accounts" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">All accounts</SelectItem>
+              <SelectItem value="all">All accounts</SelectItem>
               {accounts.map((account) => (
                 <SelectItem key={account.id} value={account.id}>
                   {account.name}

@@ -71,13 +71,13 @@ export const AccountFilters: React.FC<AccountFiltersProps> = ({
           <Label htmlFor="industry">Industry</Label>
           <Select
             value={filters.industry}
-            onValueChange={(value) => onFilterChange({ industry: value })}
+            onValueChange={(value) => onFilterChange({ industry: value === 'all' ? '' : value })}
           >
             <SelectTrigger>
               <SelectValue placeholder="All industries" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">All industries</SelectItem>
+              <SelectItem value="all">All industries</SelectItem>
               {industries.map((industry) => (
                 <SelectItem key={industry} value={industry}>
                   {industry}
@@ -91,13 +91,13 @@ export const AccountFilters: React.FC<AccountFiltersProps> = ({
           <Label htmlFor="owner">Account Owner</Label>
           <Select
             value={filters.ownerId}
-            onValueChange={(value) => onFilterChange({ ownerId: value })}
+            onValueChange={(value) => onFilterChange({ ownerId: value === 'all' ? '' : value })}
           >
             <SelectTrigger>
               <SelectValue placeholder="All owners" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">All owners</SelectItem>
+              <SelectItem value="all">All owners</SelectItem>
               {owners.map((owner) => (
                 <SelectItem key={owner.id} value={owner.id}>
                   {owner.name}
