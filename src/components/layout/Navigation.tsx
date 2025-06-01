@@ -10,7 +10,8 @@ import {
   Users, 
   LogOut,
   Send,
-  HelpCircle
+  HelpCircle,
+  User
 } from 'lucide-react';
 
 export const Navigation: React.FC = () => {
@@ -85,6 +86,14 @@ export const Navigation: React.FC = () => {
               </div>
             </div>
           </div>
+
+          {/* Profile */}
+          <Link to="/profile">
+            <Button variant="ghost" size="sm" className="flex items-center space-x-2">
+              <User className="h-4 w-4" />
+              <span>Profile</span>
+            </Button>
+          </Link>
 
           {/* Logout */}
           <Link to="/login">

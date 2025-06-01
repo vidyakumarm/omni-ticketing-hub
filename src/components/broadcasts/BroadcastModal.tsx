@@ -1,344 +1,443 @@
-
 import React, { useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Checkbox } from '@/components/ui/checkbox';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Calendar, Clock, Users, MessageSquare, Send } from 'lucide-react';
-import type { Broadcast } from '@/pages/Broadcasts';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Calendar, Clock, Users, Send, ChevronLeft, ChevronRight } from 'lucide-react';
+
+export interface Broadcast {
+  id: string;
+  name: string;
+  audience: {
+    type: 'all' | 'segments';
+    filters?: any;
+  };
+  channels: ('slack' | 'teams')[];
+  message: string;
+  schedule: {
+    type: 'now' | 'later';
+    dateTime?: string;
+  };
+  timeZone: string;
+  status: 'scheduled' | 'sent' | 'failed';
+  createdBy: {
+    id: string;
+    name: string;
+  };
+  createdAt: string;
+}
 
 interface BroadcastModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSave: (broadcast: Partial<Broadcast>) => void;
   broadcast?: Broadcast | null;
+  onSave: (broadcast: Omit<Broadcast, 'id' | 'createdAt' | 'createdBy' | 'status'>) => void;
 }
 
 export const BroadcastModal: React.FC<BroadcastModalProps> = ({
   isOpen,
   onClose,
+  broadcast,
   onSave,
-  broadcast
 }) => {
-  const [step, setStep] = useState(1);
+  const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
     name: broadcast?.name || '',
-    audienceType: broadcast?.audience?.type || 'all' as 'all' | 'segments',
+    audience: broadcast?.audience || { type: 'all' as const },
     channels: broadcast?.channels || [],
     message: broadcast?.message || '',
-    scheduleType: 'now',
-    scheduledDate: '',
-    scheduledTime: '',
-    timeZone: 'Asia/Kolkata'
+    schedule: broadcast?.schedule || { type: 'now' as const },
+    timeZone: broadcast?.timeZone || 'UTC',
   });
 
+  const [audienceCount, setAudienceCount] = useState(1250);
+  const [showPreview, setShowPreview] = useState(false);
+
+  const steps = [
+    { number: 1, title: 'Audience', icon: Users },
+    { number: 2, title: 'Message', icon: Send },
+    { number: 3, title: 'Schedule', icon: Calendar },
+  ];
+
   const handleNext = () => {
-    if (step < 3) setStep(step + 1);
+    if (currentStep < 3) {
+      setCurrentStep(currentStep + 1);
+    }
   };
 
   const handlePrevious = () => {
-    if (step > 1) setStep(step - 1);
+    if (currentStep > 1) {
+      setCurrentStep(currentStep - 1);
+    }
   };
 
-  const handleChannelChange = (channel: string, checked: boolean) => {
-    setFormData(prev => ({
-      ...prev,
-      channels: checked
-        ? [...prev.channels, channel]
-        : prev.channels.filter(c => c !== channel)
-    }));
-  };
-
-  const handleSubmit = () => {
-    const broadcastData: Partial<Broadcast> = {
-      id: broadcast?.id || `broadcast-${Date.now()}`,
-      name: formData.name,
-      audience: {
-        type: formData.audienceType,
-        filters: {}
-      },
-      channels: formData.channels,
-      message: formData.message,
-      scheduledAt: formData.scheduleType === 'now' 
-        ? new Date().toISOString()
-        : new Date(`${formData.scheduledDate}T${formData.scheduledTime}`).toISOString(),
-      status: formData.scheduleType === 'now' ? 'sent' : 'scheduled',
-      createdBy: { id: 'user-1', name: 'Admin User' },
-      createdAt: broadcast?.createdAt || new Date().toISOString()
-    };
-
-    onSave(broadcastData);
+  const handleSave = () => {
+    onSave(formData);
     onClose();
-    setStep(1);
-    setFormData({
-      name: '',
-      audienceType: 'all',
-      channels: [],
-      message: '',
-      scheduleType: 'now',
-      scheduledDate: '',
-      scheduledTime: '',
-      timeZone: 'Asia/Kolkata'
-    });
   };
 
-  const isStepValid = () => {
-    switch (step) {
+  const renderPreviewModal = () => {
+    if (!showPreview) return null;
+
+    const sampleCustomerName = 'Acme Corp';
+    const previewMessage = formData.message.replace(/\{\{customerName\}\}/g, sampleCustomerName);
+
+    return (
+      <Dialog open={showPreview} onOpenChange={setShowPreview}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Message Preview</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="p-4 bg-gray-50 rounded-lg">
+              <p className="text-sm text-gray-600 mb-2">Sample customer: {sampleCustomerName}</p>
+              <div className="whitespace-pre-wrap">{previewMessage}</div>
+            </div>
+            <Button onClick={() => setShowPreview(false)} className="w-full">
+              Close Preview
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+    );
+  };
+
+  const renderStepContent = () => {
+    switch (currentStep) {
       case 1:
-        return formData.name.trim() !== '';
+        return (
+          <div className="space-y-6">
+            <div>
+              <Label className="text-base font-medium">Audience Type</Label>
+              <div className="mt-2 space-y-3">
+                <label className="flex items-center space-x-3">
+                  <input
+                    type="radio"
+                    checked={formData.audience.type === 'all'}
+                    onChange={() => setFormData(prev => ({ ...prev, audience: { type: 'all' } }))}
+                    className="h-4 w-4 text-blue-600"
+                  />
+                  <span>All Customers</span>
+                </label>
+                <label className="flex items-center space-x-3">
+                  <input
+                    type="radio"
+                    checked={formData.audience.type === 'segments'}
+                    onChange={() => setFormData(prev => ({ ...prev, audience: { type: 'segments', filters: {} } }))}
+                    className="h-4 w-4 text-blue-600"
+                  />
+                  <span>Segment by Filters</span>
+                </label>
+              </div>
+            </div>
+
+            {formData.audience.type === 'segments' && (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-sm">Filter Options</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div>
+                    <Label>Channel</Label>
+                    <select className="w-full mt-1 border rounded-md p-2">
+                      <option>All Channels</option>
+                      <option>Slack</option>
+                      <option>MS Teams</option>
+                      <option>Email</option>
+                    </select>
+                  </div>
+                  <div>
+                    <Label>Priority</Label>
+                    <select className="w-full mt-1 border rounded-md p-2">
+                      <option>All Priorities</option>
+                      <option>Low</option>
+                      <option>Medium</option>
+                      <option>High</option>
+                      <option>Urgent</option>
+                    </select>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
+            <div className="bg-blue-50 p-4 rounded-lg">
+              <div className="flex items-center space-x-2 text-blue-700">
+                <Users className="h-5 w-5" />
+                <span className="font-medium">Preview Count: {audienceCount.toLocaleString()} customers</span>
+              </div>
+            </div>
+          </div>
+        );
+
       case 2:
-        return formData.channels.length > 0 && formData.message.trim() !== '';
+        return (
+          <div className="space-y-6">
+            <div>
+              <Label className="text-base font-medium">Broadcast Name</Label>
+              <Input
+                value={formData.name}
+                onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+                placeholder="e.g., May Product Update"
+                className="mt-2"
+              />
+            </div>
+
+            <div>
+              <Label className="text-base font-medium">Channel Selection</Label>
+              <div className="mt-2 space-y-3">
+                <label className="flex items-center space-x-3">
+                  <input
+                    type="checkbox"
+                    checked={formData.channels.includes('slack')}
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        setFormData(prev => ({ ...prev, channels: [...prev.channels, 'slack'] }));
+                      } else {
+                        setFormData(prev => ({ ...prev, channels: prev.channels.filter(c => c !== 'slack') }));
+                      }
+                    }}
+                    className="h-4 w-4 text-blue-600"
+                  />
+                  <span>Slack</span>
+                </label>
+                <label className="flex items-center space-x-3">
+                  <input
+                    type="checkbox"
+                    checked={formData.channels.includes('teams')}
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        setFormData(prev => ({ ...prev, channels: [...prev.channels, 'teams'] }));
+                      } else {
+                        setFormData(prev => ({ ...prev, channels: prev.channels.filter(c => c !== 'teams') }));
+                      }
+                    }}
+                    className="h-4 w-4 text-blue-600"
+                  />
+                  <span>MS Teams</span>
+                </label>
+              </div>
+            </div>
+
+            <div>
+              <div className="flex items-center justify-between">
+                <Label className="text-base font-medium">Message</Label>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setShowPreview(true)}
+                >
+                  Preview
+                </Button>
+              </div>
+              <Textarea
+                value={formData.message}
+                onChange={(e) => setFormData(prev => ({ ...prev, message: e.target.value }))}
+                placeholder="Write your broadcast message here... Use {{customerName}} for personalization."
+                className="mt-2 min-h-[120px]"
+              />
+              <p className="text-sm text-gray-500 mt-2">
+                Available variables: {'{{customerName}}'}, {'{{ticketId}}'}
+              </p>
+            </div>
+          </div>
+        );
+
       case 3:
-        return formData.scheduleType === 'now' || 
-               (formData.scheduledDate && formData.scheduledTime);
+        return (
+          <div className="space-y-6">
+            <div>
+              <Label className="text-base font-medium">Send Schedule</Label>
+              <div className="mt-2 space-y-3">
+                <label className="flex items-center space-x-3">
+                  <input
+                    type="radio"
+                    checked={formData.schedule.type === 'now'}
+                    onChange={() => setFormData(prev => ({ ...prev, schedule: { type: 'now' } }))}
+                    className="h-4 w-4 text-blue-600"
+                  />
+                  <span>Send Now</span>
+                </label>
+                <label className="flex items-center space-x-3">
+                  <input
+                    type="radio"
+                    checked={formData.schedule.type === 'later'}
+                    onChange={() => setFormData(prev => ({ ...prev, schedule: { type: 'later', dateTime: '' } }))}
+                    className="h-4 w-4 text-blue-600"
+                  />
+                  <span>Schedule for Later</span>
+                </label>
+              </div>
+            </div>
+
+            {formData.schedule.type === 'later' && (
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Label>Date</Label>
+                  <Input
+                    type="date"
+                    value={formData.schedule.dateTime?.split('T')[0] || ''}
+                    onChange={(e) => {
+                      const currentTime = formData.schedule.dateTime?.split('T')[1] || '00:00';
+                      setFormData(prev => ({
+                        ...prev,
+                        schedule: { ...prev.schedule, dateTime: `${e.target.value}T${currentTime}` }
+                      }));
+                    }}
+                    className="mt-1"
+                  />
+                </div>
+                <div>
+                  <Label>Time</Label>
+                  <Input
+                    type="time"
+                    value={formData.schedule.dateTime?.split('T')[1] || ''}
+                    onChange={(e) => {
+                      const currentDate = formData.schedule.dateTime?.split('T')[0] || new Date().toISOString().split('T')[0];
+                      setFormData(prev => ({
+                        ...prev,
+                        schedule: { ...prev.schedule, dateTime: `${currentDate}T${e.target.value}` }
+                      }));
+                    }}
+                    className="mt-1"
+                  />
+                </div>
+              </div>
+            )}
+
+            <div>
+              <Label>Time Zone</Label>
+              <select
+                value={formData.timeZone}
+                onChange={(e) => setFormData(prev => ({ ...prev, timeZone: e.target.value }))}
+                className="w-full mt-1 border rounded-md p-2"
+              >
+                <option value="UTC">UTC</option>
+                <option value="America/New_York">Eastern Time</option>
+                <option value="America/Los_Angeles">Pacific Time</option>
+                <option value="Europe/London">London</option>
+                <option value="Asia/Kolkata">India Standard Time</option>
+              </select>
+            </div>
+
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-sm">Review Summary</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Audience:</span>
+                  <span>{formData.audience.type === 'all' ? 'All customers' : 'Filtered segment'}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Channels:</span>
+                  <span>{formData.channels.join(' & ') || 'None selected'}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Schedule:</span>
+                  <span>
+                    {formData.schedule.type === 'now' 
+                      ? 'Send immediately' 
+                      : formData.schedule.dateTime || 'Not set'}
+                  </span>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        );
+
       default:
-        return false;
+        return null;
     }
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle>
-            {broadcast ? 'Edit Broadcast' : 'Create New Broadcast'}
-          </DialogTitle>
-        </DialogHeader>
+    <>
+      <Dialog open={isOpen} onOpenChange={onClose}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>
+              {broadcast ? 'Edit Broadcast' : 'Create New Broadcast'}
+            </DialogTitle>
+          </DialogHeader>
 
-        {/* Step Indicator */}
-        <div className="flex items-center space-x-4 mb-6">
-          {[1, 2, 3].map((stepNumber) => (
-            <div key={stepNumber} className="flex items-center">
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
-                step >= stepNumber ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-600'
-              }`}>
-                {stepNumber}
-              </div>
-              <span className={`ml-2 text-sm ${
-                step >= stepNumber ? 'text-blue-600 font-medium' : 'text-gray-500'
-              }`}>
-                {stepNumber === 1 ? 'Audience' : stepNumber === 2 ? 'Message' : 'Schedule'}
-              </span>
-              {stepNumber < 3 && <div className="w-8 h-px bg-gray-300 ml-4" />}
-            </div>
-          ))}
-        </div>
-
-        {/* Step 1: Audience Definition */}
-        {step === 1 && (
-          <div className="space-y-6">
-            <div>
-              <Label htmlFor="name">Broadcast Name</Label>
-              <Input
-                id="name"
-                value={formData.name}
-                onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-                placeholder="e.g., May Product Update"
-                className="mt-1"
-              />
-            </div>
-
-            <div>
-              <Label>Audience Type</Label>
-              <RadioGroup
-                value={formData.audienceType}
-                onValueChange={(value) => setFormData(prev => ({ 
-                  ...prev, 
-                  audienceType: value as 'all' | 'segments'
-                }))}
-                className="mt-2"
-              >
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="all" id="all" />
-                  <Label htmlFor="all">All Customers</Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="segments" id="segments" />
-                  <Label htmlFor="segments">Segment by Filters</Label>
-                </div>
-              </RadioGroup>
-            </div>
-
-            {formData.audienceType === 'segments' && (
-              <div className="p-4 bg-gray-50 rounded-lg">
-                <p className="text-sm text-gray-600 mb-2">Filter Options</p>
-                <div className="space-y-3">
-                  <div>
-                    <Label htmlFor="channel-filter">Channel</Label>
-                    <Select>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select channel" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="slack">Slack</SelectItem>
-                        <SelectItem value="teams">MS Teams</SelectItem>
-                      </SelectContent>
-                    </Select>
+          {/* Stepper */}
+          <div className="flex items-center justify-between mb-6">
+            {steps.map((step, index) => {
+              const Icon = step.icon;
+              const isActive = currentStep === step.number;
+              const isCompleted = currentStep > step.number;
+              
+              return (
+                <div key={step.number} className="flex items-center">
+                  <div className={`flex items-center space-x-2 ${isActive ? 'text-blue-600' : isCompleted ? 'text-green-600' : 'text-gray-400'}`}>
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center border-2 ${
+                      isActive ? 'border-blue-600 bg-blue-50' : 
+                      isCompleted ? 'border-green-600 bg-green-50' : 
+                      'border-gray-300'
+                    }`}>
+                      <Icon className="h-4 w-4" />
+                    </div>
+                    <span className="font-medium">{step.title}</span>
                   </div>
+                  {index < steps.length - 1 && (
+                    <div className={`w-16 h-0.5 mx-4 ${isCompleted ? 'bg-green-600' : 'bg-gray-300'}`} />
+                  )}
                 </div>
-                <div className="mt-4 p-3 bg-blue-50 rounded">
-                  <div className="flex items-center space-x-2">
-                    <Users className="h-4 w-4 text-blue-600" />
-                    <span className="text-sm font-medium text-blue-800">
-                      Preview: ~150 customers match these filters
-                    </span>
-                  </div>
-                </div>
-              </div>
-            )}
+              );
+            })}
           </div>
-        )}
 
-        {/* Step 2: Message Composition */}
-        {step === 2 && (
-          <div className="space-y-6">
-            <div>
-              <Label>Select Channels</Label>
-              <div className="mt-2 space-y-3">
-                <div className="flex items-center space-x-2">
-                  <Checkbox
-                    id="slack"
-                    checked={formData.channels.includes('slack')}
-                    onCheckedChange={(checked) => handleChannelChange('slack', checked as boolean)}
-                  />
-                  <Label htmlFor="slack">Slack</Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Checkbox
-                    id="teams"
-                    checked={formData.channels.includes('teams')}
-                    onCheckedChange={(checked) => handleChannelChange('teams', checked as boolean)}
-                  />
-                  <Label htmlFor="teams">MS Teams</Label>
-                </div>
-              </div>
-            </div>
+          {/* Step Content */}
+          <div className="min-h-[400px]">
+            {renderStepContent()}
+          </div>
 
-            <div>
-              <Label htmlFor="message">Message</Label>
-              <Textarea
-                id="message"
-                value={formData.message}
-                onChange={(e) => setFormData(prev => ({ ...prev, message: e.target.value }))}
-                placeholder="Type your broadcast message here..."
-                rows={8}
-                className="mt-1"
-              />
-              <p className="text-xs text-gray-500 mt-1">
-                Use variables like {{customerName}} for personalization
-              </p>
-            </div>
-
-            <Button variant="outline" size="sm">
-              <MessageSquare className="h-4 w-4 mr-2" />
-              Preview Message
+          {/* Navigation */}
+          <div className="flex justify-between pt-6 border-t">
+            <Button
+              variant="outline"
+              onClick={handlePrevious}
+              disabled={currentStep === 1}
+              className="flex items-center space-x-2"
+            >
+              <ChevronLeft className="h-4 w-4" />
+              <span>Previous</span>
             </Button>
-          </div>
-        )}
 
-        {/* Step 3: Schedule & Review */}
-        {step === 3 && (
-          <div className="space-y-6">
-            <div>
-              <Label>Schedule</Label>
-              <RadioGroup
-                value={formData.scheduleType}
-                onValueChange={(value) => setFormData(prev => ({ ...prev, scheduleType: value }))}
-                className="mt-2"
-              >
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="now" id="now" />
-                  <Label htmlFor="now">Send Now</Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="later" id="later" />
-                  <Label htmlFor="later">Schedule for Later</Label>
-                </div>
-              </RadioGroup>
-            </div>
-
-            {formData.scheduleType === 'later' && (
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="date">Date</Label>
-                  <Input
-                    id="date"
-                    type="date"
-                    value={formData.scheduledDate}
-                    onChange={(e) => setFormData(prev => ({ ...prev, scheduledDate: e.target.value }))}
-                    className="mt-1"
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="time">Time</Label>
-                  <Input
-                    id="time"
-                    type="time"
-                    value={formData.scheduledTime}
-                    onChange={(e) => setFormData(prev => ({ ...prev, scheduledTime: e.target.value }))}
-                    className="mt-1"
-                  />
-                </div>
-              </div>
-            )}
-
-            <div>
-              <Label htmlFor="timezone">Time Zone</Label>
-              <Select value={formData.timeZone} onValueChange={(value) => setFormData(prev => ({ ...prev, timeZone: value }))}>
-                <SelectTrigger className="mt-1">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Asia/Kolkata">Asia/Kolkata (IST)</SelectItem>
-                  <SelectItem value="America/New_York">America/New_York (EST)</SelectItem>
-                  <SelectItem value="Europe/London">Europe/London (GMT)</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            {/* Review Summary */}
-            <div className="p-4 bg-gray-50 rounded-lg">
-              <h4 className="font-medium mb-3">Review Summary</h4>
-              <div className="space-y-2 text-sm">
-                <div><strong>Audience:</strong> {formData.audienceType === 'all' ? 'All Customers' : 'Filtered Segment'}</div>
-                <div><strong>Channels:</strong> {formData.channels.map(c => c === 'teams' ? 'MS Teams' : 'Slack').join(', ')}</div>
-                <div><strong>Schedule:</strong> {formData.scheduleType === 'now' ? 'Send immediately' : `${formData.scheduledDate} at ${formData.scheduledTime}`}</div>
-                <div><strong>Message:</strong> {formData.message.substring(0, 100)}{formData.message.length > 100 ? '...' : ''}</div>
-              </div>
+            <div className="flex space-x-2">
+              <Button variant="outline" onClick={onClose}>
+                Cancel
+              </Button>
+              {currentStep === 3 ? (
+                <Button
+                  onClick={handleSave}
+                  disabled={!formData.name || formData.channels.length === 0 || !formData.message}
+                  className="flex items-center space-x-2"
+                >
+                  <Send className="h-4 w-4" />
+                  <span>{formData.schedule.type === 'now' ? 'Send Now' : 'Schedule'}</span>
+                </Button>
+              ) : (
+                <Button
+                  onClick={handleNext}
+                  disabled={
+                    (currentStep === 1 && formData.audience.type === 'segments' && !formData.audience.filters) ||
+                    (currentStep === 2 && (!formData.name || formData.channels.length === 0 || !formData.message))
+                  }
+                  className="flex items-center space-x-2"
+                >
+                  <span>Next</span>
+                  <ChevronRight className="h-4 w-4" />
+                </Button>
+              )}
             </div>
           </div>
-        )}
+        </DialogContent>
+      </Dialog>
 
-        {/* Navigation Buttons */}
-        <div className="flex justify-between pt-4">
-          <div>
-            {step > 1 && (
-              <Button variant="outline" onClick={handlePrevious}>
-                Previous
-              </Button>
-            )}
-          </div>
-          <div className="space-x-2">
-            <Button variant="outline" onClick={onClose}>
-              Cancel
-            </Button>
-            {step < 3 ? (
-              <Button onClick={handleNext} disabled={!isStepValid()}>
-                Next
-              </Button>
-            ) : (
-              <Button onClick={handleSubmit} disabled={!isStepValid()}>
-                <Send className="h-4 w-4 mr-2" />
-                {formData.scheduleType === 'now' ? 'Send Now' : 'Schedule Broadcast'}
-              </Button>
-            )}
-          </div>
-        </div>
-      </DialogContent>
-    </Dialog>
+      {renderPreviewModal()}
+    </>
   );
 };

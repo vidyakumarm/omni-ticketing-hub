@@ -20,6 +20,7 @@ import CustomStatuses from "./pages/CustomStatuses";
 import AccountsContacts from "./pages/AccountsContacts";
 import Broadcasts from "./pages/Broadcasts";
 import HelpCenter from "./pages/HelpCenter";
+import UserProfile from "./pages/UserProfile";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -47,6 +48,7 @@ const App = () => (
           <Route path="/accounts-contacts" element={<AccountsContacts />} />
           <Route path="/broadcasts" element={<Broadcasts />} />
           <Route path="/help-center" element={<HelpCenter />} />
+          <Route path="/profile" element={<UserProfile />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
