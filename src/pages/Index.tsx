@@ -34,17 +34,11 @@ const Index = () => {
       {/* Header */}
       <header className="bg-white/80 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
-              <span className="text-white font-bold text-lg">S</span>
-            </div>
-            <div className="flex flex-col">
-              <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                Syncrivo
-              </span>
-              <span className="text-xs text-gray-500 -mt-1">Smart Support</span>
-            </div>
-          </div>
+          <img 
+            src="/lovable-uploads/ab838571-125a-4a64-a279-740ccf8bcfc7.png" 
+            alt="Syncrivo Logo" 
+            className="h-10 w-auto"
+          />
           <div className="flex items-center space-x-4">
             <Link to="/login">
               <Button variant="ghost">Sign In</Button>
@@ -150,17 +144,11 @@ const Index = () => {
       {/* Footer */}
       <footer className="bg-gray-900 text-white py-8 px-4">
         <div className="max-w-6xl mx-auto text-center">
-          <div className="flex items-center justify-center space-x-3 mb-4">
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
-              <span className="text-white font-bold text-lg">S</span>
-            </div>
-            <div className="flex flex-col items-start">
-              <span className="text-xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-                Syncrivo
-              </span>
-              <span className="text-xs text-gray-400 -mt-1">Smart Support</span>
-            </div>
-          </div>
+          <img 
+            src="/lovable-uploads/ab838571-125a-4a64-a279-740ccf8bcfc7.png" 
+            alt="Syncrivo Logo" 
+            className="h-10 w-auto mx-auto mb-4"
+          />
           <p className="text-gray-400">
             © 2024 Syncrivo. All rights reserved.
           </p>

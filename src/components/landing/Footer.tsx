@@ -71,9 +71,11 @@ export const Footer = () => {
           <div className="lg:col-span-1">
             <div className="space-y-6">
               <div>
-                <h3 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-                  Thena
-                </h3>
+                <img 
+                  src="/lovable-uploads/ab838571-125a-4a64-a279-740ccf8bcfc7.png" 
+                  alt="Syncrivo Logo" 
+                  className="h-8 w-auto mb-3"
+                />
                 <p className="text-gray-400 mt-2">
                   The modern B2B ticketing platform powered by AI
                 </p>
@@ -86,7 +88,7 @@ export const Footer = () => {
                 </div>
                 <div className="flex items-center gap-3">
                   <Mail className="w-4 h-4" />
-                  <span>hello@thena.ai</span>
+                  <span>hello@syncrivo.com</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <Phone className="w-4 h-4" />
@@ -134,7 +136,7 @@ export const Footer = () => {
         {/* Bottom Footer */}
         <div className="flex flex-col lg:flex-row justify-between items-center gap-6">
           <div className="text-gray-400 text-sm">
-            © 2024 Thena. All rights reserved. Built with ❤️ for modern support teams.
+            © 2024 Syncrivo. All rights reserved. Built with ❤️ for modern support teams.
           </div>
           
           <div className="flex items-center gap-6">

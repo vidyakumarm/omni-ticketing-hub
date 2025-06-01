@@ -45,15 +45,11 @@ export const Navigation: React.FC = () => {
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         {/* Logo/Brand */}
         <Link to="/dashboard" className="flex items-center space-x-3">
-          <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
-            <div className="text-white font-bold text-lg">S</div>
-          </div>
-          <div className="flex flex-col">
-            <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              Syncrivo
-            </span>
-            <span className="text-xs text-gray-500 -mt-1">Smart Support</span>
-          </div>
+          <img 
+            src="/lovable-uploads/ab838571-125a-4a64-a279-740ccf8bcfc7.png" 
+            alt="Syncrivo Logo" 
+            className="h-10 w-auto"
+          />
         </Link>
 
         {/* Main Navigation */}
