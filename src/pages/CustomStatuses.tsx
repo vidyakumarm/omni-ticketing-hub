@@ -1,9 +1,9 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
 import { CustomStatusesList } from '@/components/settings/CustomStatusesList';
 import { CustomStatusModal } from '@/components/settings/CustomStatusModal';
+import { Layout } from '@/components/layout/Layout';
 
 export interface CustomStatus {
   id: string;
@@ -75,41 +75,43 @@ const CustomStatuses: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto p-6">
-        <div className="flex justify-between items-center mb-6">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900">Custom Statuses</h1>
-            <p className="text-gray-600 mt-1">Define custom ticket statuses to match your support process</p>
+    <Layout>
+      <div className="p-6">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex justify-between items-center mb-6">
+            <div>
+              <h1 className="text-2xl font-bold text-gray-900">Custom Statuses</h1>
+              <p className="text-gray-600 mt-1">Define custom ticket statuses to match your support process</p>
+            </div>
+            <Button 
+              onClick={() => setIsModalOpen(true)}
+              className="flex items-center gap-2"
+            >
+              <Plus className="h-4 w-4" />
+              Add New Status
+            </Button>
           </div>
-          <Button 
-            onClick={() => setIsModalOpen(true)}
-            className="flex items-center gap-2"
-          >
-            <Plus className="h-4 w-4" />
-            Add New Status
-          </Button>
+
+          <CustomStatusesList
+            customStatuses={customStatuses}
+            onEdit={handleEdit}
+            onDelete={handleDelete}
+            onReorder={handleReorder}
+          />
+
+          <CustomStatusModal
+            isOpen={isModalOpen}
+            onClose={() => {
+              setIsModalOpen(false);
+              setEditingStatus(null);
+            }}
+            onSave={handleSave}
+            customStatus={editingStatus}
+            existingNames={customStatuses.map(s => s.name)}
+          />
         </div>
-
-        <CustomStatusesList
-          customStatuses={customStatuses}
-          onEdit={handleEdit}
-          onDelete={handleDelete}
-          onReorder={handleReorder}
-        />
-
-        <CustomStatusModal
-          isOpen={isModalOpen}
-          onClose={() => {
-            setIsModalOpen(false);
-            setEditingStatus(null);
-          }}
-          onSave={handleSave}
-          customStatus={editingStatus}
-          existingNames={customStatuses.map(s => s.name)}
-        />
       </div>
-    </div>
+    </Layout>
   );
 };
 

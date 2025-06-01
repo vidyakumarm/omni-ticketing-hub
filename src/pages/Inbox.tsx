@@ -1,6 +1,6 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Layout } from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
 import { InboxFilters } from '@/components/inbox/InboxFilters';
@@ -79,50 +79,52 @@ const Inbox: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto p-6">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold text-gray-900">Inbox</h1>
-          <Button onClick={() => setIsNewTicketModalOpen(true)} className="flex items-center gap-2">
-            <Plus className="h-4 w-4" />
-            New Ticket
-          </Button>
-        </div>
+    <Layout>
+      <div className="p-6">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex justify-between items-center mb-6">
+            <h1 className="text-2xl font-bold text-gray-900">Inbox</h1>
+            <Button onClick={() => setIsNewTicketModalOpen(true)} className="flex items-center gap-2">
+              <Plus className="h-4 w-4" />
+              New Ticket
+            </Button>
+          </div>
 
-        {/* Filters */}
-        <InboxFilters 
-          filters={filters}
-          onFilterChange={handleFilterChange}
-        />
-
-        {/* Bulk Actions Bar */}
-        {selectedTickets.length > 0 && (
-          <BulkActionsBar 
-            selectedCount={selectedTickets.length}
-            onBulkAction={handleBulkAction}
+          {/* Filters */}
+          <InboxFilters 
+            filters={filters}
+            onFilterChange={handleFilterChange}
           />
-        )}
 
-        {/* Ticket List */}
-        <TicketListTable 
-          tickets={mockTickets}
-          selectedTickets={selectedTickets}
-          onSelectTicket={handleSelectTicket}
-          onSelectAll={handleSelectAll}
-          currentPage={1}
-          perPage={25}
-          onPageChange={() => {}}
-          onPerPageChange={() => {}}
-        />
+          {/* Bulk Actions Bar */}
+          {selectedTickets.length > 0 && (
+            <BulkActionsBar 
+              selectedCount={selectedTickets.length}
+              onBulkAction={handleBulkAction}
+            />
+          )}
 
-        {/* New Ticket Modal */}
-        <NewTicketModal
-          isOpen={isNewTicketModalOpen}
-          onClose={() => setIsNewTicketModalOpen(false)}
-          onTicketCreated={handleTicketCreated}
-        />
+          {/* Ticket List */}
+          <TicketListTable 
+            tickets={mockTickets}
+            selectedTickets={selectedTickets}
+            onSelectTicket={handleSelectTicket}
+            onSelectAll={handleSelectAll}
+            currentPage={1}
+            perPage={25}
+            onPageChange={() => {}}
+            onPerPageChange={() => {}}
+          />
+
+          {/* New Ticket Modal */}
+          <NewTicketModal
+            isOpen={isNewTicketModalOpen}
+            onClose={() => setIsNewTicketModalOpen(false)}
+            onTicketCreated={handleTicketCreated}
+          />
+        </div>
       </div>
-    </div>
+    </Layout>
   );
 };
 

@@ -1,5 +1,5 @@
-
 import React, { useState } from 'react';
+import { Layout } from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -157,120 +157,122 @@ const AccountsContacts: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto p-6">
-        {/* Header */}
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold text-gray-900">Accounts & Contacts</h1>
-          <div className="flex gap-2">
-            <Button 
-              onClick={() => setIsAccountModalOpen(true)}
-              className="flex items-center gap-2"
-            >
-              <Plus className="h-4 w-4" />
-              Add New Account
-            </Button>
-            <Button 
-              onClick={() => setIsContactModalOpen(true)}
-              variant="outline"
-              className="flex items-center gap-2"
-            >
-              <Plus className="h-4 w-4" />
-              Add New Contact
-            </Button>
+    <Layout>
+      <div className="p-6">
+        <div className="max-w-7xl mx-auto">
+          {/* Header */}
+          <div className="flex justify-between items-center mb-6">
+            <h1 className="text-2xl font-bold text-gray-900">Accounts & Contacts</h1>
+            <div className="flex gap-2">
+              <Button 
+                onClick={() => setIsAccountModalOpen(true)}
+                className="flex items-center gap-2"
+              >
+                <Plus className="h-4 w-4" />
+                Add New Account
+              </Button>
+              <Button 
+                onClick={() => setIsContactModalOpen(true)}
+                variant="outline"
+                className="flex items-center gap-2"
+              >
+                <Plus className="h-4 w-4" />
+                Add New Contact
+              </Button>
+            </div>
           </div>
-        </div>
 
-        {/* Search */}
-        <div className="relative mb-6">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-          <Input
-            placeholder="Search accounts, contacts, or emails..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10"
-          />
-        </div>
-
-        {/* Tabs */}
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList>
-            <TabsTrigger value="accounts">Accounts</TabsTrigger>
-            <TabsTrigger value="contacts">Contacts</TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="accounts" className="space-y-4">
-            <AccountFilters 
-              filters={accountFilters}
-              onFilterChange={handleAccountFilterChange}
+          {/* Search */}
+          <div className="relative mb-6">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+            <Input
+              placeholder="Search accounts, contacts, or emails..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-10"
             />
-            <AccountsTable
-              accounts={mockAccounts}
+          </div>
+
+          {/* Tabs */}
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+            <TabsList>
+              <TabsTrigger value="accounts">Accounts</TabsTrigger>
+              <TabsTrigger value="contacts">Contacts</TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="accounts" className="space-y-4">
+              <AccountFilters 
+                filters={accountFilters}
+                onFilterChange={handleAccountFilterChange}
+              />
+              <AccountsTable
+                accounts={mockAccounts}
+                onEdit={handleEditAccount}
+                onDelete={handleDeleteAccount}
+                onViewAccount={setSelectedAccount}
+              />
+            </TabsContent>
+
+            <TabsContent value="contacts" className="space-y-4">
+              <ContactFilters 
+                filters={contactFilters}
+                onFilterChange={handleContactFilterChange}
+              />
+              <ContactsTable
+                contacts={mockContacts}
+                onEdit={handleEditContact}
+                onDelete={handleDeleteContact}
+                onViewContact={setSelectedContact}
+                onViewAccount={(accountId) => {
+                  const account = mockAccounts.find(a => a.id === accountId);
+                  if (account) setSelectedAccount(account);
+                }}
+              />
+            </TabsContent>
+          </Tabs>
+
+          {/* Modals */}
+          <AccountModal
+            isOpen={isAccountModalOpen}
+            onClose={() => {
+              setIsAccountModalOpen(false);
+              setEditingAccount(null);
+            }}
+            onAccountCreated={handleAccountCreated}
+            editingAccount={editingAccount}
+          />
+
+          <ContactModal
+            isOpen={isContactModalOpen}
+            onClose={() => {
+              setIsContactModalOpen(false);
+              setEditingContact(null);
+            }}
+            onContactCreated={handleContactCreated}
+            editingContact={editingContact}
+            accounts={mockAccounts}
+          />
+
+          {/* Detail Panels */}
+          {selectedAccount && (
+            <AccountDetailPanel
+              account={selectedAccount}
+              onClose={() => setSelectedAccount(null)}
               onEdit={handleEditAccount}
-              onDelete={handleDeleteAccount}
-              onViewAccount={setSelectedAccount}
             />
-          </TabsContent>
+          )}
 
-          <TabsContent value="contacts" className="space-y-4">
-            <ContactFilters 
-              filters={contactFilters}
-              onFilterChange={handleContactFilterChange}
-            />
-            <ContactsTable
-              contacts={mockContacts}
+          {selectedContact && (
+            <ContactDetailPanel
+              contact={selectedContact}
+              onClose={() => setSelectedContact(null)}
               onEdit={handleEditContact}
-              onDelete={handleDeleteContact}
-              onViewContact={setSelectedContact}
-              onViewAccount={(accountId) => {
-                const account = mockAccounts.find(a => a.id === accountId);
-                if (account) setSelectedAccount(account);
-              }}
+              account={mockAccounts.find(a => a.id === selectedContact.accountId)}
             />
-          </TabsContent>
-        </Tabs>
-
-        {/* Modals */}
-        <AccountModal
-          isOpen={isAccountModalOpen}
-          onClose={() => {
-            setIsAccountModalOpen(false);
-            setEditingAccount(null);
-          }}
-          onAccountCreated={handleAccountCreated}
-          editingAccount={editingAccount}
-        />
-
-        <ContactModal
-          isOpen={isContactModalOpen}
-          onClose={() => {
-            setIsContactModalOpen(false);
-            setEditingContact(null);
-          }}
-          onContactCreated={handleContactCreated}
-          editingContact={editingContact}
-          accounts={mockAccounts}
-        />
-
-        {/* Detail Panels */}
-        {selectedAccount && (
-          <AccountDetailPanel
-            account={selectedAccount}
-            onClose={() => setSelectedAccount(null)}
-            onEdit={handleEditAccount}
-          />
-        )}
-
-        {selectedContact && (
-          <ContactDetailPanel
-            contact={selectedContact}
-            onClose={() => setSelectedContact(null)}
-            onEdit={handleEditContact}
-            account={mockAccounts.find(a => a.id === selectedContact.accountId)}
-          />
-        )}
+          )}
+        </div>
       </div>
-    </div>
+    </Layout>
   );
 };
 
