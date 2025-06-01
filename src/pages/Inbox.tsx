@@ -52,6 +52,7 @@ const Inbox: React.FC = () => {
     {
       id: 'ticket-1',
       subject: 'Login issue with SSO',
+      preview: 'User experiencing issues logging in with SSO configuration...',
       customer: { name: 'John Doe', avatarUrl: '/placeholder.svg' },
       channel: 'email' as const,
       status: 'open' as const,
