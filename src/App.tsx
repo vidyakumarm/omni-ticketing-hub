@@ -22,6 +22,7 @@ import Broadcasts from "./pages/Broadcasts";
 import HelpCenter from "./pages/HelpCenter";
 import UserProfile from "./pages/UserProfile";
 import AISettings from "./pages/AISettings";
+import BillingSubscription from "./pages/BillingSubscription";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -47,6 +48,7 @@ const App = () => (
           <Route path="/settings/workflows" element={<Workflows />} />
           <Route path="/settings/custom-statuses" element={<CustomStatuses />} />
           <Route path="/settings/ai" element={<AISettings />} />
+          <Route path="/settings/billing" element={<BillingSubscription />} />
           <Route path="/accounts-contacts" element={<AccountsContacts />} />
           <Route path="/broadcasts" element={<Broadcasts />} />
           <Route path="/help-center" element={<HelpCenter />} />

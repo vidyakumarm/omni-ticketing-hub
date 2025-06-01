@@ -12,7 +12,8 @@ import {
   Send,
   HelpCircle,
   User,
-  Bot
+  Bot,
+  CreditCard
 } from 'lucide-react';
 
 export const Navigation: React.FC = () => {
@@ -34,6 +35,7 @@ export const Navigation: React.FC = () => {
     { path: '/settings/tags', label: 'Tags' },
     { path: '/settings/workflows', label: 'Workflows' },
     { path: '/settings/ai', label: 'AI & Automation', icon: Bot },
+    { path: '/settings/billing', label: 'Billing & Subscription', icon: CreditCard },
   ];
 
   const isActive = (path: string) => location.pathname === path;
