@@ -46,9 +46,9 @@ export const Navigation: React.FC = () => {
         {/* Logo/Brand */}
         <Link to="/dashboard" className="flex items-center space-x-3">
           <img 
-            src="/lovable-uploads/7107c14c-5771-44e1-88dc-cc29acbcb6b3.png" 
+            src="/lovable-uploads/9ac2f9b7-9c86-409e-8218-08684cd425b6.png" 
             alt="Syncrivo Logo" 
-            className="h-14 w-auto hover:scale-105 transition-transform duration-200"
+            className="h-16 w-auto hover:scale-105 transition-transform duration-200"
           />
         </Link>
 

@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -34,9 +35,9 @@ const Index = () => {
       <header className="bg-white/80 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
           <img 
-            src="/lovable-uploads/7107c14c-5771-44e1-88dc-cc29acbcb6b3.png" 
+            src="/lovable-uploads/9ac2f9b7-9c86-409e-8218-08684cd425b6.png" 
             alt="Syncrivo Logo" 
-            className="h-12 w-auto hover:scale-105 transition-transform duration-200"
+            className="h-14 w-auto hover:scale-105 transition-transform duration-200"
           />
           <div className="flex items-center space-x-4">
             <Link to="/login">
@@ -144,9 +145,9 @@ const Index = () => {
       <footer className="bg-gray-900 text-white py-8 px-4">
         <div className="max-w-6xl mx-auto text-center">
           <img 
-            src="/lovable-uploads/7107c14c-5771-44e1-88dc-cc29acbcb6b3.png" 
+            src="/lovable-uploads/9ac2f9b7-9c86-409e-8218-08684cd425b6.png" 
             alt="Syncrivo Logo" 
-            className="h-12 w-auto mx-auto mb-4 hover:scale-105 transition-transform duration-200"
+            className="h-14 w-auto mx-auto mb-4 hover:scale-105 transition-transform duration-200"
           />
           <p className="text-gray-400">
             © 2024 Syncrivo. All rights reserved.
