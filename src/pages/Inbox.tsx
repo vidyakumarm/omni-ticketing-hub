@@ -7,6 +7,7 @@ import { InboxFilters } from '@/components/inbox/InboxFilters';
 import { TicketListTable } from '@/components/inbox/TicketListTable';
 import { BulkActionsBar } from '@/components/inbox/BulkActionsBar';
 import { NewTicketModal } from '@/components/ticket-creation/NewTicketModal';
+import { MergeTicketsModal } from '@/components/tickets/MergeTicketsModal';
 
 interface TicketFilters {
   search: string;
@@ -23,6 +24,7 @@ const Inbox: React.FC = () => {
   const navigate = useNavigate();
   const [selectedTickets, setSelectedTickets] = useState<string[]>([]);
   const [isNewTicketModalOpen, setIsNewTicketModalOpen] = useState(false);
+  const [isMergeModalOpen, setIsMergeModalOpen] = useState(false);
   const [filters, setFilters] = useState<TicketFilters>({
     search: '',
     status: [],
@@ -38,16 +40,27 @@ const Inbox: React.FC = () => {
     navigate(`/ticket/${ticketId}`);
   };
 
-  const handleBulkAction = (action: string) => {
+  const handleBulkAction = (action: string, payload: any) => {
     console.log('Bulk action:', action, 'on tickets:', selectedTickets);
-    // Handle bulk actions here
+    
+    if (action === 'merge') {
+      setIsMergeModalOpen(true);
+    } else {
+      // Handle other bulk actions here
+    }
   };
 
   const handleFilterChange = (newFilters: any) => {
     setFilters(prev => ({ ...prev, ...newFilters }));
   };
 
-  // Mock tickets for the table
+  const handleMergeComplete = (targetTicketId: string) => {
+    // Clear selected tickets and navigate to merged ticket
+    setSelectedTickets([]);
+    navigate(`/ticket/${targetTicketId}`);
+  };
+
+  // Mock tickets for the table - enhanced with custom fields and tags
   const mockTickets = [
     {
       id: 'ticket-1',
@@ -62,9 +75,47 @@ const Inbox: React.FC = () => {
       status: 'open' as const,
       priority: 'High' as const,
       assignee: { id: 'agent-1', name: 'Alice Johnson', avatarUrl: '/placeholder.svg' },
-      lastUpdated: '2024-01-15T10:30:00Z'
+      lastUpdated: '2024-01-15T10:30:00Z',
+      customFields: { product: 'Pro', plan: 'Business' },
+      tags: ['login', 'sso', 'urgent']
+    },
+    {
+      id: 'ticket-2',
+      subject: 'SSO authentication error',
+      preview: 'Getting error message when trying to authenticate via SSO...',
+      customer: { 
+        name: 'Jane Smith', 
+        avatarUrl: '/placeholder.svg',
+        identifier: 'jane.smith@company.com'
+      },
+      channel: 'slack' as const,
+      status: 'open' as const,
+      priority: 'Medium' as const,
+      assignee: { id: 'agent-2', name: 'Bob Smith', avatarUrl: '/placeholder.svg' },
+      lastUpdated: '2024-01-15T11:15:00Z',
+      customFields: { product: 'Enterprise', plan: 'Business' },
+      tags: ['login', 'sso']
+    },
+    {
+      id: 'ticket-3',
+      subject: 'Account access problems',
+      preview: 'Cannot access account after recent update...',
+      customer: { 
+        name: 'Mike Johnson', 
+        avatarUrl: '/placeholder.svg',
+        identifier: 'mike.johnson@company.com'
+      },
+      channel: 'web' as const,
+      status: 'pending' as const,
+      priority: 'Low' as const,
+      assignee: null,
+      lastUpdated: '2024-01-15T09:45:00Z',
+      customFields: { product: 'Pro', plan: 'Basic' },
+      tags: ['access', 'account']
     }
   ];
+
+  const selectedTicketObjects = mockTickets.filter(ticket => selectedTickets.includes(ticket.id));
 
   const handleSelectTicket = (ticketId: string, selected: boolean) => {
     setSelectedTickets(prev => 
@@ -121,6 +172,14 @@ const Inbox: React.FC = () => {
             isOpen={isNewTicketModalOpen}
             onClose={() => setIsNewTicketModalOpen(false)}
             onTicketCreated={handleTicketCreated}
+          />
+
+          {/* Merge Tickets Modal */}
+          <MergeTicketsModal
+            isOpen={isMergeModalOpen}
+            onClose={() => setIsMergeModalOpen(false)}
+            tickets={selectedTicketObjects}
+            onMergeComplete={handleMergeComplete}
           />
         </div>
       </div>

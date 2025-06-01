@@ -67,7 +67,7 @@ export const BulkActionsBar: React.FC<BulkActionsBarProps> = ({
             <Button
               variant="outline"
               size="sm"
-              onClick={() => onBulkAction('merge', {})}
+              onClick={() => onBulkAction('merge', { selectedTickets: [] })}
             >
               Merge
             </Button>
