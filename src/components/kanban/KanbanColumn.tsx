@@ -6,12 +6,16 @@ export interface KanbanColumnProps {
   id: string;
   title: string;
   tickets: any[];
+  onQuickReply?: (ticketId: string) => void;
+  onAssignTicket?: (ticketId: string, agentId: string) => void;
 }
 
 export const KanbanColumn: React.FC<KanbanColumnProps> = ({
   id,
   title,
-  tickets
+  tickets,
+  onQuickReply = () => {},
+  onAssignTicket = () => {}
 }) => {
   return (
     <div className="bg-gray-50 rounded-lg p-4 min-w-80">
@@ -29,7 +33,12 @@ export const KanbanColumn: React.FC<KanbanColumnProps> = ({
           </p>
         ) : (
           tickets.map((ticket) => (
-            <TicketCard key={ticket.id} ticket={ticket} />
+            <TicketCard 
+              key={ticket.id} 
+              ticket={ticket} 
+              onQuickReply={onQuickReply}
+              onAssignTicket={onAssignTicket}
+            />
           ))
         )}
       </div>
