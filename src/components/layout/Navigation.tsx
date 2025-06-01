@@ -8,7 +8,8 @@ import {
   LayoutGrid, 
   Settings, 
   Users, 
-  LogOut 
+  LogOut,
+  Send
 } from 'lucide-react';
 
 export const Navigation: React.FC = () => {
@@ -19,6 +20,7 @@ export const Navigation: React.FC = () => {
     { path: '/inbox', label: 'Inbox', icon: Inbox },
     { path: '/kanban', label: 'Kanban', icon: LayoutGrid },
     { path: '/accounts-contacts', label: 'Accounts & Contacts', icon: Users },
+    { path: '/broadcasts', label: 'Broadcasts', icon: Send },
   ];
 
   const settingsItems = [

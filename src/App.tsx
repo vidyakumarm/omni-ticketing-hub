@@ -18,6 +18,7 @@ import Tags from "./pages/Tags";
 import Workflows from "./pages/Workflows";
 import CustomStatuses from "./pages/CustomStatuses";
 import AccountsContacts from "./pages/AccountsContacts";
+import Broadcasts from "./pages/Broadcasts";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -43,6 +44,7 @@ const App = () => (
           <Route path="/settings/workflows" element={<Workflows />} />
           <Route path="/settings/custom-statuses" element={<CustomStatuses />} />
           <Route path="/accounts-contacts" element={<AccountsContacts />} />
+          <Route path="/broadcasts" element={<Broadcasts />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

@@ -30,9 +30,6 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({
           id={column.id}
           title={column.title}
           tickets={column.tickets}
-          onTicketMove={onTicketMove}
-          onQuickReply={onQuickReply}
-          onAssignTicket={onAssignTicket}
         />
       ))}
     </div>
