@@ -72,7 +72,7 @@ export const Footer = () => {
             <div className="space-y-6">
               <div>
                 <img 
-                  src="/lovable-uploads/ab838571-125a-4a64-a279-740ccf8bcfc7.png" 
+                  src="/lovable-uploads/7107c14c-5771-44e1-88dc-cc29acbcb6b3.png" 
                   alt="Syncrivo Logo" 
                   className="h-8 w-auto mb-3"
                 />

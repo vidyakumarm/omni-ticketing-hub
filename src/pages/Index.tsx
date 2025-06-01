@@ -35,7 +35,7 @@ const Index = () => {
       <header className="bg-white/80 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
           <img 
-            src="/lovable-uploads/ab838571-125a-4a64-a279-740ccf8bcfc7.png" 
+            src="/lovable-uploads/7107c14c-5771-44e1-88dc-cc29acbcb6b3.png" 
             alt="Syncrivo Logo" 
             className="h-10 w-auto"
           />
@@ -145,7 +145,7 @@ const Index = () => {
       <footer className="bg-gray-900 text-white py-8 px-4">
         <div className="max-w-6xl mx-auto text-center">
           <img 
-            src="/lovable-uploads/ab838571-125a-4a64-a279-740ccf8bcfc7.png" 
+            src="/lovable-uploads/7107c14c-5771-44e1-88dc-cc29acbcb6b3.png" 
             alt="Syncrivo Logo" 
             className="h-10 w-auto mx-auto mb-4"
           />
