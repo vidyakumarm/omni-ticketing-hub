@@ -44,11 +44,16 @@ export const Navigation: React.FC = () => {
     <nav className="bg-white border-b border-gray-200 px-4 py-3">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         {/* Logo/Brand */}
-        <Link to="/dashboard" className="flex items-center space-x-2">
-          <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-            <span className="text-white font-bold text-sm">T</span>
+        <Link to="/dashboard" className="flex items-center space-x-3">
+          <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+            <div className="text-white font-bold text-lg">S</div>
           </div>
-          <span className="text-xl font-bold text-gray-900">Thena</span>
+          <div className="flex flex-col">
+            <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              Syncrivo
+            </span>
+            <span className="text-xs text-gray-500 -mt-1">Smart Support</span>
+          </div>
         </Link>
 
         {/* Main Navigation */}
