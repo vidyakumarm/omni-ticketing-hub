@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -37,7 +36,7 @@ const Index = () => {
           <img 
             src="/lovable-uploads/7107c14c-5771-44e1-88dc-cc29acbcb6b3.png" 
             alt="Syncrivo Logo" 
-            className="h-10 w-auto"
+            className="h-12 w-auto hover:scale-105 transition-transform duration-200"
           />
           <div className="flex items-center space-x-4">
             <Link to="/login">
@@ -147,7 +146,7 @@ const Index = () => {
           <img 
             src="/lovable-uploads/7107c14c-5771-44e1-88dc-cc29acbcb6b3.png" 
             alt="Syncrivo Logo" 
-            className="h-10 w-auto mx-auto mb-4"
+            className="h-12 w-auto mx-auto mb-4 hover:scale-105 transition-transform duration-200"
           />
           <p className="text-gray-400">
             © 2024 Syncrivo. All rights reserved.

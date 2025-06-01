@@ -48,7 +48,7 @@ export const Navigation: React.FC = () => {
           <img 
             src="/lovable-uploads/7107c14c-5771-44e1-88dc-cc29acbcb6b3.png" 
             alt="Syncrivo Logo" 
-            className="h-10 w-auto"
+            className="h-14 w-auto hover:scale-105 transition-transform duration-200"
           />
         </Link>
 

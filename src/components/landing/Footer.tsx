@@ -74,7 +74,7 @@ export const Footer = () => {
                 <img 
                   src="/lovable-uploads/7107c14c-5771-44e1-88dc-cc29acbcb6b3.png" 
                   alt="Syncrivo Logo" 
-                  className="h-8 w-auto mb-3"
+                  className="h-10 w-auto mb-3 hover:scale-105 transition-transform duration-200"
                 />
                 <p className="text-gray-400 mt-2">
                   The modern B2B ticketing platform powered by AI
