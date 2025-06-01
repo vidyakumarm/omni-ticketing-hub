@@ -24,6 +24,10 @@ import UserProfile from "./pages/UserProfile";
 import AISettings from "./pages/AISettings";
 import BillingSubscription from "./pages/BillingSubscription";
 import NotFound from "./pages/NotFound";
+import ServerError from "./pages/ServerError";
+import Forbidden from "./pages/Forbidden";
+import RateLimited from "./pages/RateLimited";
+import Maintenance from "./pages/Maintenance";
 
 const queryClient = new QueryClient();
 
@@ -53,6 +57,13 @@ const App = () => (
           <Route path="/broadcasts" element={<Broadcasts />} />
           <Route path="/help-center" element={<HelpCenter />} />
           <Route path="/profile" element={<UserProfile />} />
+          
+          {/* Error Pages */}
+          <Route path="/error/500" element={<ServerError />} />
+          <Route path="/error/403" element={<Forbidden />} />
+          <Route path="/error/429" element={<RateLimited />} />
+          <Route path="/maintenance" element={<Maintenance />} />
+          
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
