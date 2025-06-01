@@ -91,6 +91,11 @@ const Broadcasts = () => {
     setSelectedBroadcastId(null);
   };
 
+  const handleSaveBroadcast = (broadcastData: Partial<Broadcast>) => {
+    console.log('Saving broadcast:', broadcastData);
+    // Handle save logic here
+  };
+
   return (
     <Layout>
       <div className="container mx-auto p-6">
@@ -135,8 +140,10 @@ const Broadcasts = () => {
 
         {isModalOpen && (
           <BroadcastModal
+            isOpen={isModalOpen}
             broadcast={selectedBroadcast}
             onClose={handleCloseModal}
+            onSave={handleSaveBroadcast}
           />
         )}
 

@@ -9,7 +9,8 @@ import {
   Settings, 
   Users, 
   LogOut,
-  Send
+  Send,
+  HelpCircle
 } from 'lucide-react';
 
 export const Navigation: React.FC = () => {
@@ -21,6 +22,7 @@ export const Navigation: React.FC = () => {
     { path: '/kanban', label: 'Kanban', icon: LayoutGrid },
     { path: '/accounts-contacts', label: 'Accounts & Contacts', icon: Users },
     { path: '/broadcasts', label: 'Broadcasts', icon: Send },
+    { path: '/help-center', label: 'Help Center', icon: HelpCircle },
   ];
 
   const settingsItems = [
